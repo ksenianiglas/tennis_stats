@@ -1,11 +1,7 @@
-<<<<<<< HEAD
 df_wta <- get_tennis_data("wta", 1968:2020)
 GS_winners_wta <- df_wta %>%
   filter(tourney_level == "G" & round == "F") %>%
   select(winner_name, tourney_name, year)
-=======
-df <- get_tennis_data("atp", 2001:2020)
->>>>>>> 33fe0b7348fdd7bcba3037e29cc08813378a5654
 
 df_atp <- get_tennis_data("atp", 1968:2020)
 GS_winners_atp <- df_atp %>%
@@ -16,10 +12,6 @@ GS_winners_atp <- df_atp %>%
 df_wta %>%
   semi_join(GS_winners_wta, by = c("tourney_name", "winner_name", "year")) %>%
   select(winner_name, tourney_name, year, score) %>%
-<<<<<<< HEAD
-  filter(year > 2000) %>%
-=======
->>>>>>> 33fe0b7348fdd7bcba3037e29cc08813378a5654
   rowwise() %>%
   mutate(games_lost = no_of_games_lost(score)) %>%
   group_by(winner_name, tourney_name, year) %>%
@@ -35,3 +27,13 @@ df_atp %>%
   group_by(winner_name, tourney_name, year) %>%
   summarise(mins_on_court = sum(minutes)) %>%
   arrange(-mins_on_court) 
+
+#games per tournament
+df_wta %>%
+  filter(tourney_level == "G") %>%
+  select(winner_name, tourney_name, year, score) %>%
+  rowwise() %>%
+  mutate(games_played = no_of_games_played(score)) %>%
+  group_by(tourney_name) %>%
+  summarise(no_of_games_playd = sum(games_played)) %>%
+  arrange(no_of_games_playd)

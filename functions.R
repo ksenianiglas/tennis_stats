@@ -41,3 +41,24 @@ no_of_games_lost <- function(score) {
     sum()
 }
 
+# count no of games played
+no_of_games_played <- function(score) {
+  if (score %in% c("W/O", "Walkover")) {
+    return(0)
+  }
+  score %>%
+    str_split(" ")  %>%
+    unlist() %>%
+    setdiff("RET") %>%
+    lapply(function(game) {
+      str_split(game, "-") %>%
+        reduce(c) %>%
+        str_sub(1, 1) %>%
+        as.numeric() %>%
+        sum()
+    }
+    ) %>%
+    unlist() %>%
+    sum()
+}
+
