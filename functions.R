@@ -21,17 +21,23 @@ get_tennis_data <- function(tour, years) {
 
 # count no of games lost
 no_of_games_lost <- function(score) {
+  if (score %in% c("W/O", "Walkover")) {
+    return(0)
+  }
   score %>%
     str_split(" ")  %>%
+    unlist() %>%
+    setdiff("RET") %>%
     lapply(function(game) {
       str_split(game, "-") %>%
         reduce(c) %>%
-        .[seq(2, length(.), 2)] %>%
+        .[seq(2, length(.), by = 2)] %>%
         str_sub(1, 1) %>%
         as.numeric() %>%
         sum()
     }
     ) %>%
-    unlist()
+    unlist() %>%
+    sum()
 }
 
